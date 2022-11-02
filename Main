@@ -1,0 +1,141 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local demoUI = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local label = Instance.new("TextLabel")
+local UICorner = Instance.new("UICorner")
+local ImageLabel = Instance.new("ImageLabel")
+local UICorner_2 = Instance.new("UICorner")
+local TextButton = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+local Frame_2 = Instance.new("Frame")
+
+--Properties:
+
+demoUI.Name = "demoUI"
+demoUI.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+demoUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = demoUI
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundTransparency = 0.600
+Frame.Position = UDim2.new(0.560557783, 0, 0.140740737, 100)
+Frame.Size = UDim2.new(0, 390, 0, 252)
+
+label.Name = "label"
+label.Parent = Frame
+label.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
+label.BackgroundTransparency = 1.000
+label.Position = UDim2.new(0.25, 0, 0.349999994, 0)
+label.Size = UDim2.new(0.5, 0, 0, 25)
+label.Font = Enum.Font.SciFi
+label.Text = "DRAGGABLE WINDOW "
+label.TextColor3 = Color3.fromRGB(255, 255, 255)
+label.TextScaled = true
+label.TextSize = 14.000
+label.TextWrapped = true
+
+UICorner.CornerRadius = UDim.new(0.00499999989, 13)
+UICorner.Parent = Frame
+
+ImageLabel.Parent = Frame
+ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageLabel.Size = UDim2.new(0, 390, 0, 252)
+ImageLabel.Image = "rbxassetid://10527571475"
+
+UICorner_2.CornerRadius = UDim.new(0.00499999989, 13)
+UICorner_2.Parent = ImageLabel
+
+TextButton.Parent = ImageLabel
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 0.750
+TextButton.Position = UDim2.new(0, 84, 0, 71)
+TextButton.Size = UDim2.new(0, 200, 0, 50)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Silent-Aim"
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 27.000
+TextButton.MouseButton1Down:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Averiias/Universal-SilentAim/main/main.lua"))()
+end)
+
+UICorner_3.CornerRadius = UDim.new(0.00499999989, 13)
+UICorner_3.Parent = TextButton
+
+TextLabel.Parent = ImageLabel
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Size = UDim2.new(0, 390, 0, 71)
+TextLabel.Font = Enum.Font.FredokaOne
+TextLabel.Text = "Legit 1.0"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 48.000
+
+Frame_2.Archivable = false
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame_2.BackgroundTransparency = 1.000
+Frame_2.Size = UDim2.new(0, 390, 0, 62)
+
+-- Scripts:
+
+local function WQTX_fake_script() -- demoUI.demo 
+	local script = Instance.new('LocalScript', demoUI)
+
+	resizer = require(script.Parent.Parent.guiResizer.handler)
+	
+	frameToResize = script.Parent.Frame
+	
+	-- you can add a minimum size (optional)
+	
+	minimumSize = Vector2.new(240, 160)
+	
+	resizer.makeResizable(frameToResize, minimumSize)
+	resizer.makeDraggable(frameToResize)
+	
+end
+coroutine.wrap(WQTX_fake_script)()
+local function UOWGT_fake_script() -- Frame.LocalScript 
+	local script = Instance.new('LocalScript', Frame)
+
+	local UIS = game:GetService('UserInputService')
+	local frame = script.Parent
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+	
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end
+	
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+	
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input)
+			end
+		end
+	end)
+	
+end
+coroutine.wrap(UOWGT_fake_script)()
